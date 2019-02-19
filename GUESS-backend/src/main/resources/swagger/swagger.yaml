@@ -81,8 +81,6 @@ definitions:
       refreshExpiresIn:
         type: integer
         format: int64
-      twilioChatToken:
-        type: string
 
 responses:
   BadRequest:
