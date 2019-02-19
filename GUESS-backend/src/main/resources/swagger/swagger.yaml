@@ -1,0 +1,143 @@
+swagger: "2.0"
+info:
+  title: GUESS
+  version: "0.1"
+  description: GUESS - API
+
+produces: ["application/json"]
+
+basePath: /api/v1
+
+tags:
+  - name: Auth
+
+paths:
+  "/auth/signup":
+    post:
+      tags: [Auth]
+      operationId: signUp
+      security:
+        - userAuth: []
+      consumes:
+        - application/json
+      responses:
+        "201":
+          description: Created
+
+definitions:
+  Problem:
+    type: object
+    properties:
+      type:
+        type: string
+        format: uri
+      title:
+        type: string
+      status:
+        type: integer
+        format: int32
+        minimum: 100
+        maximum: 600
+      detail:
+        type: string
+      instance:
+        type: string
+        format: uri
+      violations:
+        type: array
+        items:
+          $ref: "#/definitions/Violation"
+
+  Violation:
+    type: object
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+
+  UserRole:
+    type: string
+    enum:
+      - "USER"
+      - "ADMIN"
+
+  TokenModel:
+    type: object
+    properties:
+      accessToken:
+        type: string
+      accessIssuedAt:
+        type: integer
+        format: int64
+      accessExpiresIn:
+        type: integer
+        format: int64
+      refreshToken:
+        type: string
+      refreshIssuedAt:
+        type: integer
+        format: int64
+      refreshExpiresIn:
+        type: integer
+        format: int64
+      twilioChatToken:
+        type: string
+
+responses:
+  BadRequest:
+    description: Bad Request
+    schema:
+      $ref: "#/definitions/Problem"
+
+  UnsupportedMediaType:
+    description: Unsupported Media Type
+    schema:
+      $ref: "#/definitions/Problem"
+
+  Unauthorized:
+    description: Unauthorized
+    schema:
+      $ref: "#/definitions/Problem"
+
+  Forbidden:
+    description: Forbidden
+    schema:
+      $ref: "#/definitions/Problem"
+
+  NotFound:
+    description: Not Found
+    schema:
+      $ref: "#/definitions/Problem"
+
+  Conflict:
+    description: Conflict
+    schema:
+      $ref: "#/definitions/Problem"
+
+  UnprocessableEntity:
+    description: Unprocessable Entity
+    schema:
+      $ref: "#/definitions/Problem"
+
+parameters:
+  PageQueryParameter:
+    name: page
+    in: query
+    type: integer
+    default: 1
+    minimum: 1
+
+  SizeQueryParameter:
+    name: size
+    in: query
+    type: integer
+    default: 10
+    minimum: 10
+    maximum: 30
+
+securityDefinitions:
+  userAuth:
+    type: apiKey
+    in: header
+    name: Authorization

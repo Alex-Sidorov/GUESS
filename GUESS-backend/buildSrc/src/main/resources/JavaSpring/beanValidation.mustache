@@ -1,0 +1,9 @@
+{{#required}}
+  @NotNull
+{{/required}}{{#isContainer}}{{^isPrimitiveType}}{{^isEnum}}
+  @Valid{{/isEnum}}{{/isPrimitiveType}}{{/isContainer}}{{#isNotContainer}}{{^isPrimitiveType}}
+  @Valid{{/isPrimitiveType}}{{/isNotContainer}}{{#email}}
+  @Email{{/email}}{{#currency}}
+  @Digits(integer = 12, fraction = 2){{/currency}}{{#url}}
+  @URL{{/url}}
+{{>beanValidationCore}}
