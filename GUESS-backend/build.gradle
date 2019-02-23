@@ -53,7 +53,7 @@ dependencies {
     }
     compile "org.apache.commons:commons-lang3"
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.19.1'
-    implementation("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
     implementation("org.postgresql:postgresql")
     compile group: 'org.hibernate', name: 'hibernate-java8', version: "${hibernateVersion}"
     implementation("com.vladmihalcea:hibernate-types-52:${hibernateTypes52Version}")

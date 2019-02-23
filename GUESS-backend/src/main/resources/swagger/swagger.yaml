@@ -10,19 +10,257 @@ basePath: /api/v1
 
 tags:
   - name: Auth
+  - name: Profile
+  - name: User
+  - name: Picture
 
 paths:
+#======================================== [Auth API]
   "/auth/signup":
     post:
       tags: [Auth]
       operationId: signUp
+      security: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: signupRequest
+          required: true
+          schema:
+            "$ref": "#/definitions/SignupRequest"
+      responses:
+        "201":
+          description: Created
+          schema:
+            "$ref": "#/definitions/User"
+        "400":
+          $ref: "#/responses/BadRequest"
+
+  "/auth/signin":
+    post:
+      tags: [Auth]
+      operationId: signIn
+      security: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: signinRequest
+          required: true
+          schema:
+            "$ref": "#/definitions/SigninRequest"
+      responses:
+        "201":
+          description: Created
+          schema:
+            "$ref": "#/definitions/TokenModel"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+#========================================
+
+#======================================== [Account API]
+  "/profile":
+    get:
+      tags: [Profile]
+      operationId: getProfile
+      security:
+        - userAuth: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/User"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+    put:
+      tags: [Profile]
+      operationId: updateProfile
       security:
         - userAuth: []
       consumes:
         - application/json
+      parameters:
+        - in: body
+          name: updateRequest
+          required: true
+          schema:
+            "$ref": "#/definitions/User"
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/User"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/profile/change-password":
+    put:
+      tags: [Profile]
+      operationId: changePassword
+      security:
+        - userAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: changePasswordRequest
+          required: true
+          schema:
+            "$ref": "#/definitions/ChangePasswordRequest"
+      responses:
+        "200":
+          description: OK
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/profile/pictures":
+    get:
+      tags: [Profile]
+      operationId: getProfilePictures
+      security:
+        - userAuth: []
+      parameters:
+        - $ref: "#/parameters/PageQueryParameter"
+        - $ref: "#/parameters/SizeQueryParameter"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Picture"
+        "401":
+          $ref: "#/responses/Unauthorized"
+#========================================
+
+#======================================== [User API]
+  "/users":
+    get:
+      tags: [User]
+      operationId: getUsers
+      security:
+        - userAuth: []
+      parameters:
+        - $ref: "#/parameters/PageQueryParameter"
+        - $ref: "#/parameters/SizeQueryParameter"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/User"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/users/{userId}":
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        type: string
+        format: uuid
+    get:
+      tags: [User]
+      operationId: getUser
+      security:
+        - userAuth: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/User"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+#========================================
+
+#======================================== [Picture API]
+  "/pictures":
+    get:
+      tags: [Picture]
+      operationId: getPictures
+      security:
+        - userAuth: []
+      parameters:
+        - $ref: "#/parameters/PageQueryParameter"
+        - $ref: "#/parameters/SizeQueryParameter"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Picture"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+    post:
+      tags: [Picture]
+      operationId: uploadPicture
+      security:
+        - userAuth: []
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          required: true
       responses:
         "201":
           description: Created
+          schema:
+            "$ref": "#/definitions/Picture"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/pictures/{pictureId}":
+    parameters:
+      - in: path
+        name: pictureId
+        required: true
+        type: string
+        format: uuid
+    get:
+      tags: [Picture]
+      operationId: getImage
+      security:
+        - userAuth: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/Picture"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+    delete:
+      tags: [Picture]
+      operationId: deleteImage
+      security:
+        - userAuth: []
+      responses:
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+#========================================
 
 definitions:
   Problem:
@@ -81,6 +319,101 @@ definitions:
       refreshExpiresIn:
         type: integer
         format: int64
+
+  SignupRequest:
+    type: object
+    required:
+      - firstName
+      - lastName
+      - email
+      - password
+    properties:
+      firstName:
+        type: string
+        minLength: 3
+        maxLength: 50
+        example: "Jeff"
+      lastName:
+        type: string
+        minLength: 3
+        maxLength: 50
+        example: "Bezos"
+      email:
+        type: string
+        format: email
+        minLength: 5
+        maxLength: 254
+        example: "user@gmail.com"
+      password:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+
+  SigninRequest:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+        minLength: 5
+        maxLength: 254
+        example: "user@gmail.com"
+      password:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+
+  User:
+    type: object
+    required:
+      - firstName
+      - lastName
+    properties:
+      firstName:
+        type: string
+        example: "Jeff"
+      lastName:
+        type: string
+        example: "Bezos"
+      email:
+        type: string
+        example: "user@gmail.com"
+        readOnly: true
+
+  ChangePasswordRequest:
+    type: object
+    required:
+      - currentPassword
+      - newPassword
+    properties:
+      currentPassword:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+      newPassword:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+
+  Picture:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      url:
+        type: string
 
 responses:
   BadRequest:

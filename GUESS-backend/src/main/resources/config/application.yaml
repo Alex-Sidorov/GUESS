@@ -37,8 +37,8 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: postgres
+    username:
+    password:
     url: jdbc:postgresql://localhost:5432/guess_db
 
 server:
