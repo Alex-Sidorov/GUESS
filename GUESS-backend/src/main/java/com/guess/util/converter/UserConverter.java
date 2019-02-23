@@ -30,4 +30,11 @@ public class UserConverter {
                 .email(userEntity.getEmail());
     }
 
+    public static UserEntity updateUser(UserEntity target, User source) {
+
+        target.setFirstName(source.getFirstName());
+        target.setLastName(source.getLastName());
+        return target;
+    }
+
 }

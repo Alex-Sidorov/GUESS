@@ -5,6 +5,7 @@ import com.guess.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -13,12 +14,14 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     @Override
+    @Transactional
     public Page<User> getUsers(int page, int size) {
 
         return null;
     }
 
     @Override
+    @Transactional
     public User getUser(UUID userId) {
 
         return null;
