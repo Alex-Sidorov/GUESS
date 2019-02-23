@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +37,7 @@ public class UserApiController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<User> getUser(UUID userId) {
+    public ResponseEntity<User> getUser(@PathVariable("userId") UUID userId) {
 
         final User user = userService.getUser(userId);
         return new ResponseEntity<>(user, OK);

@@ -1,6 +1,8 @@
 package com.guess.respository;
 
 import com.guess.entity.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,5 +25,13 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
             "AND id = :userId ",
             nativeQuery = true)
     Optional<UserEntity> findOneById(@Param("userId") UUID userId);
+
+    @Query(value = "SELECT * FROM guess_user " +
+            "WHERE deleted_at IS NULL " +
+            "ORDER BY created_at DESC ",
+            countQuery = "SELECT COUNT(id) FROM guess_user " +
+                    "WHERE deleted_at IS NULL ",
+            nativeQuery = true)
+    Page<UserEntity> findAllSortedByCreation(Pageable pageable);
 
 }
