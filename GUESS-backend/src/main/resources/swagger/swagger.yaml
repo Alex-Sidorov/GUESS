@@ -235,7 +235,7 @@ paths:
         format: uuid
     get:
       tags: [Picture]
-      operationId: getImage
+      operationId: getPicture
       security:
         - userAuth: []
       responses:
@@ -250,7 +250,7 @@ paths:
 
     delete:
       tags: [Picture]
-      operationId: deleteImage
+      operationId: deletePicture
       security:
         - userAuth: []
       responses:

@@ -7,6 +7,7 @@ import com.guess.model.TokenModel;
 import com.guess.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -16,13 +17,15 @@ import javax.validation.Valid;
 public class AuthApiController implements AuthApi {
 
     @Override
-    public ResponseEntity<User> signUp(@Valid SignupRequest signupRequest) {
+    public ResponseEntity<User> signUp(@Valid @RequestBody SignupRequest signupRequest) {
 
         return null;
     }
 
     @Override
-    public ResponseEntity<TokenModel> signIn(@Valid SigninRequest signinRequest) {
+    public ResponseEntity<TokenModel> signIn(@Valid @RequestBody SigninRequest signinRequest) {
+
         return null;
     }
+
 }
