@@ -4,6 +4,7 @@ import com.guess.model.SigninRequest;
 import com.guess.model.SignupRequest;
 import com.guess.model.TokenModel;
 import com.guess.model.User;
+import com.guess.respository.UserRepository;
 import com.guess.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
+    private final UserRepository userRepository;
 
     @Override
     public User signUp(SignupRequest request) {
