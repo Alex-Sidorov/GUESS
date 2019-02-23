@@ -59,6 +59,29 @@ paths:
           $ref: "#/responses/BadRequest"
         "401":
           $ref: "#/responses/Unauthorized"
+
+  "/auth/refresh-token":
+    post:
+      tags: [Auth]
+      operationId: refreshToken
+      security: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: refreshRequest
+          required: true
+          schema:
+            "$ref": "#/definitions/RefreshTokenRequest"
+      responses:
+        "201":
+          description: Created
+          schema:
+            "$ref": "#/definitions/TokenModel"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
 #========================================
 
 #======================================== [Account API]
@@ -320,6 +343,14 @@ definitions:
         type: integer
         format: int64
 
+  RefreshTokenRequest:
+    type: object
+    required:
+    - refreshToken
+    properties:
+      refreshToken:
+        type: string
+
   SignupRequest:
     type: object
     required:
@@ -376,6 +407,10 @@ definitions:
       - firstName
       - lastName
     properties:
+      id:
+        type: string
+        format: uuid
+        readOnly: true
       firstName:
         type: string
         example: "Jeff"

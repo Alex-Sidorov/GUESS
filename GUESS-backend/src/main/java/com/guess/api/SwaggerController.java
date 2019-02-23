@@ -83,4 +83,5 @@ public class SwaggerController {
     private JsonNode loadJson(ObjectMapper objectMapper, ResourceLoader resourceLoader, String location) throws IOException {
         return objectMapper.readTree(resourceLoader.getResource(location).getInputStream());
     }
+
 }

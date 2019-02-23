@@ -18,9 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
-import static com.guess.controller.AuthApi.basePath;
-import static com.guess.controller.AuthApi.signInPath;
-import static com.guess.controller.AuthApi.signUpPath;
+import static com.guess.controller.AuthApi.*;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -62,6 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 .antMatchers(signUpPath).permitAll()
                 .antMatchers(signInPath).permitAll()
+                .antMatchers(refreshTokenPath).permitAll()
                 .antMatchers(basePath + "/**").authenticated();
     }
 

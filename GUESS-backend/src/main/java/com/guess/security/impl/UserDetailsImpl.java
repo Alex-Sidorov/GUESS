@@ -56,4 +56,12 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
+    public UUID getUserId() {
+        return this.userId;
+    }
+
+    public UserRole getUserRole() {
+        return this.role;
+    }
+
 }

@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
     @Query(value = "SELECT * FROM guess_user " +
             "WHERE deleted_at IS NULL " +
-            "AND email = :email ",
+            "AND lower(email) = :email ",
             nativeQuery = true)
     Optional<UserEntity> findOneByEmail(@Param("email") String email);
 

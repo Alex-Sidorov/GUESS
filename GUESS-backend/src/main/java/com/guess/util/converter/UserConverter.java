@@ -2,6 +2,7 @@ package com.guess.util.converter;
 
 import com.guess.entity.UserEntity;
 import com.guess.model.SignupRequest;
+import com.guess.model.User;
 import lombok.experimental.UtilityClass;
 
 import static com.guess.entity.enums.UserRole.USER;
@@ -19,4 +20,14 @@ public class UserConverter {
                 .role(USER)
                 .build();
     }
+
+    public static User toUserModel(UserEntity userEntity) {
+
+        return new User()
+                .id(userEntity.getId())
+                .firstName(userEntity.getFirstName())
+                .lastName(userEntity.getLastName())
+                .email(userEntity.getEmail());
+    }
+
 }

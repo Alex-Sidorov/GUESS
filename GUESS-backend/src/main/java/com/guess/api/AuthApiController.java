@@ -1,10 +1,7 @@
 package com.guess.api;
 
 import com.guess.controller.AuthApi;
-import com.guess.model.SigninRequest;
-import com.guess.model.SignupRequest;
-import com.guess.model.TokenModel;
-import com.guess.model.User;
+import com.guess.model.*;
 import com.guess.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +29,13 @@ public class AuthApiController implements AuthApi {
     public ResponseEntity<TokenModel> signIn(@Valid @RequestBody SigninRequest signinRequest) {
 
         final TokenModel tokenModel = authService.signIn(signinRequest);
+        return new ResponseEntity<>(tokenModel, CREATED);
+    }
+
+    @Override
+    public ResponseEntity<TokenModel> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshRequest) {
+
+        final TokenModel tokenModel = authService.refreshToken(refreshRequest);
         return new ResponseEntity<>(tokenModel, CREATED);
     }
 

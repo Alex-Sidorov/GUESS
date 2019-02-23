@@ -27,4 +27,5 @@ public abstract class AuditableEntity {
     public void preUpdate() {
         updatedAt = Instant.now();
     }
+
 }
