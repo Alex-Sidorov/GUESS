@@ -13,6 +13,9 @@ app:
       region: "${AMAZON_S3_REGION:}"
       bucket-name: "${AMAZON_S3_BUCKET_NAME:}"
 
+    cloudfront:
+      host-name: "${AMAZON_CLOUDFRONT_HOST_NAME:}"
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
