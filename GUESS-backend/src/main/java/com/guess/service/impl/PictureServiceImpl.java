@@ -50,7 +50,7 @@ public class PictureServiceImpl implements PictureService {
     @Transactional
     public Picture getPicture(UUID pictureId) {
 
-        return pictureRepository.findById(pictureId)
+        return pictureRepository.findOneById(pictureId)
                 .map(PictureConverter::toPictureModel)
                 .orElseThrow(() -> new NotFoundException("Picture not found!"));
     }

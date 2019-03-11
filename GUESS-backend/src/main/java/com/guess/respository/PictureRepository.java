@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -32,6 +33,12 @@ public interface PictureRepository extends JpaRepository<PictureEntity, UUID> {
             nativeQuery = true)
     Page<PictureEntity> findAllByUserIdSortedByCreation(@Param("userId") UUID userId,
                                                         Pageable pageable);
+
+    @Query(value = "SELECT * FROM picture " +
+            "WHERE id = :pictureId " +
+            "AND deleted_at IS NULL ",
+            nativeQuery = true)
+    Optional<PictureEntity> findOneById(@Param("pictureId") UUID pictureId);
 
     @Modifying
     @Query(value = "UPDATE picture " +

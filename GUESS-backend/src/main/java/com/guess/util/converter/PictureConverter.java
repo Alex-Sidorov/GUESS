@@ -1,6 +1,7 @@
 package com.guess.util.converter;
 
 import com.guess.entity.PictureEntity;
+import com.guess.entity.UserEntity;
 import com.guess.model.Picture;
 import lombok.experimental.UtilityClass;
 
@@ -19,7 +20,7 @@ public class PictureConverter {
     public static PictureEntity toPictureEntity(UUID userId, String url) {
 
         return PictureEntity.builder()
-                .userId(userId)
+                .userEntity(UserEntity.builder().id(userId).build())
                 .url(url)
                 .build();
     }
