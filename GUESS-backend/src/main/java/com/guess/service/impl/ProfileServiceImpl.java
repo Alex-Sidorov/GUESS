@@ -7,6 +7,7 @@ import com.guess.model.ChangePasswordRequest;
 import com.guess.model.Picture;
 import com.guess.model.User;
 import com.guess.respository.UserRepository;
+import com.guess.service.PictureService;
 import com.guess.service.ProfileService;
 import com.guess.util.converter.UserConverter;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import static com.guess.util.SecurityUtility.getUserId;
 @AllArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
 
+    private final PictureService pictureService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -51,7 +53,7 @@ public class ProfileServiceImpl implements ProfileService {
     public void changePassword(ChangePasswordRequest request) {
 
         final Optional<UserEntity> user = userRepository.findOneById(getUserId());
-        if(user.isPresent() && passwordEncoder.matches(request.getCurrentPassword(), user.get().getHashPassword())) {
+        if (user.isPresent() && passwordEncoder.matches(request.getCurrentPassword(), user.get().getHashPassword())) {
             user.get().setHashPassword(passwordEncoder.encode(request.getNewPassword()));
             userRepository.saveAndFlush(user.get());
         } else {
@@ -63,7 +65,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public Page<Picture> getProfilePictures(int page, int size) {
 
-        return null;
+        return pictureService.getPictures(getUserId(), page, size);
     }
 
 }

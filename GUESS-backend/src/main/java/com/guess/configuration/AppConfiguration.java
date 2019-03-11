@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class AppConfiguration {
 
     private Jwt jwt = new Jwt();
+    private Amazon amazon = new Amazon();
 
     @Getter
     @Setter
@@ -23,6 +24,33 @@ public class AppConfiguration {
 
         private long accessTokenValidity;
         private long refreshTokenValidity;
+    }
+
+    @Getter
+    @Setter
+    public static class Amazon {
+
+        private String accessKey;
+        private String secretKey;
+
+        private S3 s3 = new S3();
+        private CloudFront cloudFront = new CloudFront();
+
+        @Getter
+        @Setter
+        public static class S3 {
+
+            private String endpoint;
+            private String region;
+            private String bucketName;
+        }
+
+        @Getter
+        @Setter
+        public static class CloudFront {
+
+            private String hostName;
+        }
     }
 
 }

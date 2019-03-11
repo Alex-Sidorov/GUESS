@@ -5,13 +5,13 @@ app:
     refresh-token-validity: 86400   # 24 hours in seconds
     base64-secret: "${JWT_BASE64_SECRET:}"
 
-  #amazon:
-    #access-key: "${AMAZON_ACCESS_KEY:}"
-    #secret-key: "${AMAZON_SECRET_KEY:}"
+  amazon:
+    access-key: "${AMAZON_ACCESS_KEY:}"
+    secret-key: "${AMAZON_SECRET_KEY:}"
 
-    #s3:
-      #region: "${AMAZON_S3_REGION:}"
-      #bucket-name: "${AMAZON_S3_BUCKET_NAME:}"
+    s3:
+      region: "${AMAZON_S3_REGION:}"
+      bucket-name: "${AMAZON_S3_BUCKET_NAME:}"
 
 spring:
   datasource:
@@ -47,3 +47,14 @@ server:
 app:
   jwt:
     base64-secret: "2BIMHtZJKdfpGpESKHhq1AEjjzCoU4LPqZID0Nkf9f50EQbqLkly0Epg8fqqOpxMmQmxNT4DyCUfK3G1ME+LFw=="
+
+  amazon:
+    access-key: "AKIAIV2JQ5FO44KIVVOA"
+    secret-key: "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"
+
+    s3:
+      region: "eu-central-1"
+      bucket-name: "guess-images"
+
+    cloudfront:
+      host-name: "d176hzxhkgkfa3.cloudfront.net"
