@@ -1,8 +1,9 @@
 import falcon
 
+from config import configuration
 from views import RecognitionView
 
-
+configuration()
 api = application = falcon.API()
 
 recognition_view = RecognitionView()
