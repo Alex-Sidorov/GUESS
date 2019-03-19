@@ -17,13 +17,15 @@ from object_detection.utils import label_map_util
 
 from object_detection.utils import visualization_utils as vis_util
 
-MODEL_NAME = 'ssd_mobilenet_v1_coco_2017_11_17'
-MODEL_FILE = MODEL_NAME + '.tar.gz'
-DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
+# MODEL_NAME = 'ssd_mobilenet_v1_coco_2017_11_17'
+MODEL_NAME = 'v1_graph'
+# MODEL_FILE = MODEL_NAME + '.tar.gz'
+# DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
 
 PATH_TO_FROZEN_GRAPH = os.path.join('recognition', MODEL_NAME + '/frozen_inference_graph.pb')
 
-PATH_TO_LABELS = 'research/object_detection/data/mscoco_label_map.pbtxt'
+# PATH_TO_LABELS = 'research/object_detection/data/mscoco_label_map.pbtxt'
+PATH_TO_LABELS = 'recognition/v1_labels.pbtxt'
 
 
 IMAGE_SIZE = (12, 8)
@@ -143,17 +145,15 @@ if __name__ == '__main__':
 
     PATH_TO_FROZEN_GRAPH = MODEL_NAME + '/frozen_inference_graph.pb'
 
-    import object_detection as d
-
     PATH_TO_LABELS = '/home/elchin/PycharmProjects/GUESS/data_processing/webapp/research/object_detection/data/mscoco_label_map.pbtxt'
-
-    opener = urllib.request.URLopener()
-    opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
-    tar_file = tarfile.open(MODEL_FILE)
-    for file in tar_file.getmembers():
-        file_name = os.path.basename(file.name)
-        if 'frozen_inference_graph.pb' in file_name:
-            tar_file.extract(file, os.getcwd())
+    #
+    # opener = urllib.request.URLopener()
+    # opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
+    # tar_file = tarfile.open(MODEL_FILE)
+    # for file in tar_file.getmembers():
+    #     file_name = os.path.basename(file.name)
+    #     if 'frozen_inference_graph.pb' in file_name:
+    #         tar_file.extract(file, os.getcwd())
 
     detection_graph = tf.Graph()
     with detection_graph.as_default():
