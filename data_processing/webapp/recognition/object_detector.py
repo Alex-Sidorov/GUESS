@@ -93,46 +93,41 @@ def recognize(image):
     #     if 'frozen_inference_graph.pb' in file_name:
     #         tar_file.extract(file, os.getcwd())
 
-    with open(PATH_TO_FROZEN_GRAPH, 'rb') as f:
-        print('opened')
+    # with open(PATH_TO_FROZEN_GRAPH, 'rb') as f:
+    #     print('opened')
 
     detection_graph = tf.Graph()
     with detection_graph.as_default():
         od_graph_def = tf.GraphDef()
         with tf.gfile.GFile(PATH_TO_FROZEN_GRAPH, 'rb') as fid:
-            print('opned')
             serialized_graph = fid.read()
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
 
     category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
 
-    # image_path = 'male-african-lion-walking-at-ndutu-serengeti-national-park-tanzania-picture-id881788680.jpg'
     image = Image.open(image)
-    # the array based representation of the image will be used later in order to prepare the
-    # result image with boxes and labels on it.
     image_np = load_image_into_numpy_array(image)
     # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
     image_np_expanded = np.expand_dims(image_np, axis=0)
+
     # Actual detection.
     output_dict = run_inference_for_single_image(image_np, detection_graph)
 
-    a = list(filter(lambda x: x[0] > 0.5, zip(output_dict['detection_scores'], output_dict['detection_classes'])))
+    raw_results = list(filter(lambda x: x[0] > 0.5, zip(output_dict['detection_scores'],
+                                                        output_dict['detection_classes'])))
+    result = [(category_index[res[1]]['name'], float(res[0])) for res in raw_results]
 
-    result = []
-    for i in a:
-        result.append({category_index[i[1]]['name']: float(i[0])})
-
-            # Visualization of the results of a detection.
-    vis_util.visualize_boxes_and_labels_on_image_array(
-        image_np,
-        output_dict['detection_boxes'],
-        output_dict['detection_classes'],
-        output_dict['detection_scores'],
-        category_index,
-        instance_masks=output_dict.get('detection_masks'),
-        use_normalized_coordinates=True,
-        line_thickness=8)
+    # Visualize on picture
+    # vis_util.visualize_boxes_and_labels_on_image_array(
+    #     image_np,
+    #     output_dict['detection_boxes'],
+    #     output_dict['detection_classes'],
+    #     output_dict['detection_scores'],
+    #     category_index,
+    #     instance_masks=output_dict.get('detection_masks'),
+    #     use_normalized_coordinates=True,
+    #     line_thickness=8)
 
     return result
 

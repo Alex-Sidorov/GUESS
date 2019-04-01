@@ -26,3 +26,4 @@ tensorflow==1.13.1
 tensorflow-estimator==1.13.0
 termcolor==1.1.0
 Werkzeug==0.14.1
+falcon-multipart==0.2.0
