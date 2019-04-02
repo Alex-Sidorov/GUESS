@@ -45,6 +45,8 @@ Following quality indicators are major for current app:
 
 ## 6. Structure scheme
 High level architecture:
-!(HighLevelArchitecture.jpg)
-[Planned architecture](ToBe.pdf)
-[Architecture as is](AsIs.pdf)
+![pic](HighLevelArchitecture.jpg)
+
+[Detailed planned architecture](ToBe.pdf)
+
+[Detailed achitecture as is](AsIs.pdf)
