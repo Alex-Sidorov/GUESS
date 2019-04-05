@@ -1,4 +1,4 @@
-﻿# GUESS description
+﻿# Architecture
 ## 1. Type
 **GUESS** is an android application of a hybrid type. These are connected mobile and web cloud applications. The main advantages of hybrid applications are cross-platform on web-technologies and the ability to access the functions of a smartphone or other mobile device. Specifically, camera of the mobile device will be used with this application.
 ## 2. Deployment strategy
