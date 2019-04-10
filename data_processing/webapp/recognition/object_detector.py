@@ -17,16 +17,11 @@ from object_detection.utils import label_map_util
 
 from object_detection.utils import visualization_utils as vis_util
 
-# MODEL_NAME = 'ssd_mobilenet_v1_coco_2017_11_17'
-MODEL_NAME = 'v1_graph'
-# MODEL_FILE = MODEL_NAME + '.tar.gz'
-# DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
+MODEL_NAME = 'v2_02_graph'
 
 PATH_TO_FROZEN_GRAPH = os.path.join('recognition', MODEL_NAME + '/frozen_inference_graph.pb')
 
-# PATH_TO_LABELS = 'research/object_detection/data/mscoco_label_map.pbtxt'
-PATH_TO_LABELS = 'recognition/v1_labels.pbtxt'
-
+PATH_TO_LABELS = 'recognition/v2_labels.pbtxt'
 
 IMAGE_SIZE = (12, 8)
 
