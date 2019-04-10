@@ -3,7 +3,7 @@ package com.guess.service.impl;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.guess.configuration.AppConfiguration;
-import com.guess.service.AmazonService;
+import com.guess.service.AmazonS3Service;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.net.URL;
 
 @Service
 @AllArgsConstructor
-public class AmazonServiceImpl implements AmazonService {
+public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     private final AmazonS3 amazonS3;
     private final AppConfiguration appConfiguration;

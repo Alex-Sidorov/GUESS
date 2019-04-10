@@ -3,7 +3,7 @@ package com.guess.service.impl;
 import com.guess.exception.NotFoundException;
 import com.guess.model.Picture;
 import com.guess.respository.PictureRepository;
-import com.guess.service.AmazonService;
+import com.guess.service.AmazonS3Service;
 import com.guess.service.PictureService;
 import com.guess.util.converter.PictureConverter;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ import static com.guess.util.converter.PictureConverter.toPictureModel;
 @AllArgsConstructor
 public class PictureServiceImpl implements PictureService {
 
-    private final AmazonService amazonService;
+    private final AmazonS3Service amazonS3Service;
     private final PictureRepository pictureRepository;
 
     private final MimeTypes mimeTypes = MimeTypes.getDefaultMimeTypes();
@@ -60,10 +60,10 @@ public class PictureServiceImpl implements PictureService {
     public Picture uploadPicture(MultipartFile file) {
 
         final UUID userId = getUserId();
-        final String filename = createFilename(userId.toString(), UUID.randomUUID().toString(), file.getContentType());
+        final String filename = createFilename(UUID.randomUUID().toString(), file.getContentType());
 
-        amazonService.uploadToAmazon(file, filename);
-        final String pictureUrl = amazonService.getFileUrl(filename);
+        amazonS3Service.uploadToAmazon(file, filename);
+        final String pictureUrl = amazonS3Service.getFileUrl(filename);
         return toPictureModel(pictureRepository.saveAndFlush(toPictureEntity(userId, pictureUrl)));
     }
 
@@ -75,10 +75,10 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @SneakyThrows
-    private String createFilename(String prefix, String key, String contentType) {
+    private String createFilename(String key, String contentType) {
 
         final String ext = mimeTypes.forName(contentType).getExtension();
-        return prefix + "/" + key + ext;
+        return key + ext;
     }
 
 }

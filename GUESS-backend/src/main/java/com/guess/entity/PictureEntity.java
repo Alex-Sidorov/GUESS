@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.UUID;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -19,7 +21,7 @@ public class PictureEntity extends AuditableEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
 
