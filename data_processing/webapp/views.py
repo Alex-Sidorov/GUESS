@@ -21,3 +21,23 @@ class RecognitionView:
         response = serializer(raw_response)
 
         resp.body = response
+
+
+class LabelsView:
+    PATH_TO_LABELS = 'recognition/v2_labels.pbtxt'
+
+    @staticmethod
+    def labels_serializer(raw_response):
+        resp = list(map(lambda x: {'name': x}, raw_response))
+        return json.dumps(resp)
+
+    def on_get(self, req, resp):
+
+        labels = []
+        with open(self.PATH_TO_LABELS) as f:
+            for line in f:
+                if line.startswith('  name'):
+                    labels.append(line.rstrip()[9: -1])  # getting labels from .pbtxt format
+        response = self.labels_serializer(labels)
+
+        resp.body = response
