@@ -17,7 +17,7 @@ from object_detection.utils import label_map_util
 
 from object_detection.utils import visualization_utils as vis_util
 
-MODEL_NAME = 'v2_02_graph'
+MODEL_NAME = 'v2_03_graph'
 
 PATH_TO_FROZEN_GRAPH = os.path.join('recognition', MODEL_NAME + '/frozen_inference_graph.pb')
 
