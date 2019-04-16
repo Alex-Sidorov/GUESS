@@ -1,7 +1,21 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-		<file>images/cat.jpg</file>
-		<file>images/logo.png</file>
+        <file>images/logo.png</file>
+        <file>images/cap.png</file>
+        <file>images/foc.png</file>
+        <file>images/point.png</file>
+        <file>images/gal.png</file>
+        <file>WaitPage.qml</file>
+        <file>MainPage.qml</file>
+        <file>CameraPage.qml</file>
+        <file>SendImagePage.qml</file>
+        <file>ProfilePage.qml</file>
+        <file>QuizPage.qml</file>
+        <file>ResultPage.qml</file>
+        <file>SigninPage.qml</file>
+        <file>SignupPage.qml</file>
+        <file>ChangeNamePage.qml</file>
+        <file>ChangePasswordPage.qml</file>
     </qresource>
 </RCC>
