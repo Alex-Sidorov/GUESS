@@ -2,7 +2,7 @@ package com.guess.security.impl;
 
 import com.guess.configuration.AppConfiguration;
 import com.guess.entity.UserEntity;
-import com.guess.entity.enums.UserRole;
+import com.guess.entity.enums.UserRoleEntity;
 import com.guess.model.TokenModel;
 import com.guess.security.TokenProvider;
 import io.jsonwebtoken.JwtBuilder;
@@ -37,7 +37,6 @@ public class TokenProviderImpl implements TokenProvider {
 
     @PostConstruct
     public void init() {
-
         this.key = Keys.hmacShaKeyFor(BASE64.decode(appConfiguration.getJwt().getBase64Secret()));
         this.accessTokenValidityMillis = appConfiguration.getJwt().getAccessTokenValidity() * MILLIS_IN_SECOND;
         this.refreshTokenValidityMillis = appConfiguration.getJwt().getRefreshTokenValidity() * MILLIS_IN_SECOND;
@@ -45,7 +44,6 @@ public class TokenProviderImpl implements TokenProvider {
 
     @Override
     public TokenModel createTokenModel(UserEntity userEntity) {
-
         final long currentTimeMillis = System.currentTimeMillis();
         final Date issuedAt = new Date(currentTimeMillis);
 
@@ -66,7 +64,6 @@ public class TokenProviderImpl implements TokenProvider {
 
     @Override
     public TokenModel refreshToken(String refreshToken) {
-
         final long currentTimeMillis = System.currentTimeMillis();
         final Date accessIssuedAt = new Date(currentTimeMillis);
         final Date refreshIssuedAt = Jwts.parser().setSigningKey(key).parseClaimsJws(refreshToken).getBody().getIssuedAt();
@@ -88,7 +85,6 @@ public class TokenProviderImpl implements TokenProvider {
 
     @Override
     public UserEntity buildUserEntityByToken(String token) {
-
         return UserEntity.builder()
                 .id(getUserIdByToken(token))
                 .role(getUserRoleByToken(token))
@@ -96,32 +92,28 @@ public class TokenProviderImpl implements TokenProvider {
     }
 
     private String createToken(UserEntity userEntity, Date issuedAt, Date expiresIn, String tokenType) {
-
         return createToken(userEntity.getId(), userEntity.getRole(), issuedAt, expiresIn, tokenType);
     }
 
-    private String createToken(UUID userId, UserRole userRole, Date issuedAt, Date expiresIn, String tokenType) {
-
-        final JwtBuilder jwtBuilder =  Jwts.builder();
+    private String createToken(UUID userId, UserRoleEntity userRoleEntity, Date issuedAt, Date expiresIn, String tokenType) {
+        final JwtBuilder jwtBuilder = Jwts.builder();
 
         jwtBuilder.setSubject(userId.toString());
         jwtBuilder.setIssuedAt(issuedAt);
         jwtBuilder.setExpiration(expiresIn);
         jwtBuilder.claim(TYPE_KEY, tokenType);
-        jwtBuilder.claim(ROLE_KEY, userRole.toString());
+        jwtBuilder.claim(ROLE_KEY, userRoleEntity.toString());
 
         jwtBuilder.signWith(key, SignatureAlgorithm.HS512);
         return jwtBuilder.compact();
     }
 
     private UUID getUserIdByToken(String token) {
-
         return UUID.fromString(Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject());
     }
 
-    private UserRole getUserRoleByToken(String token) {
-
-        return UserRole.valueOf((String)Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get(ROLE_KEY));
+    private UserRoleEntity getUserRoleByToken(String token) {
+        return UserRoleEntity.valueOf((String) Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get(ROLE_KEY));
     }
 
 }

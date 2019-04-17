@@ -17,11 +17,10 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
         final TokenAuthentication tokenAuthentication = (TokenAuthentication) authentication;
         final String accessToken = tokenAuthentication.getName();
 
-        if(tokenValidator.validateAccessToken(accessToken)) {
+        if (tokenValidator.validateAccessToken(accessToken)) {
             final UserDetails userDetails = new UserDetailsImpl(tokenProvider.buildUserEntityByToken(accessToken));
 
             tokenAuthentication.setUserDetails(userDetails);
@@ -37,4 +36,5 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
         return TokenAuthentication.class.equals(authentication);
     }
+
 }

@@ -17,7 +17,6 @@ public class ExceptionHandling implements ProblemHandling {
 
     @Override
     public ResponseEntity<Problem> process(ResponseEntity<Problem> entity, NativeWebRequest request) {
-
         Problem problem = entity.getBody();
         if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
             return entity;
@@ -46,4 +45,5 @@ public class ExceptionHandling implements ProblemHandling {
     public ResponseEntity<Problem> handle(InvalidFormatException ex, NativeWebRequest request) {
         return create(Status.UNPROCESSABLE_ENTITY, ex, request, ErrorType.UNPROCESSABLE_ENTITY);
     }
+
 }

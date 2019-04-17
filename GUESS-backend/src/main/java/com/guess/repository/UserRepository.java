@@ -1,4 +1,4 @@
-package com.guess.respository;
+package com.guess.repository;
 
 import com.guess.entity.UserEntity;
 import org.springframework.data.domain.Page;
@@ -14,22 +14,22 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
-    @Query(value = "SELECT * FROM guess_user " +
+    @Query(value = "SELECT * FROM user_ " +
             "WHERE deleted_at IS NULL " +
-            "AND lower(email) = :email ",
+            "AND email = :email ",
             nativeQuery = true)
     Optional<UserEntity> findOneByEmail(@Param("email") String email);
 
-    @Query(value = "SELECT * FROM guess_user " +
+    @Query(value = "SELECT * FROM user_ " +
             "WHERE deleted_at IS NULL " +
             "AND id = :userId ",
             nativeQuery = true)
     Optional<UserEntity> findOneById(@Param("userId") UUID userId);
 
-    @Query(value = "SELECT * FROM guess_user " +
+    @Query(value = "SELECT * FROM user_ " +
             "WHERE deleted_at IS NULL " +
             "ORDER BY created_at DESC ",
-            countQuery = "SELECT COUNT(id) FROM guess_user " +
+            countQuery = "SELECT COUNT(id) FROM user_ " +
                     "WHERE deleted_at IS NULL ",
             nativeQuery = true)
     Page<UserEntity> findAllSortedByCreation(Pageable pageable);

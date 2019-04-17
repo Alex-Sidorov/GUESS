@@ -25,17 +25,15 @@ public class TokenValidatorImpl implements TokenValidator {
 
     @PostConstruct
     public void init() {
-
         this.key = Keys.hmacShaKeyFor(BASE64.decode(appConfiguration.getJwt().getBase64Secret()));
     }
 
     @Override
     public boolean validateAccessToken(String accessToken) {
-
         try {
             Jwts.parser().setSigningKey(key).parseClaimsJws(accessToken);
             return true;
-        } catch(JwtException e) {
+        } catch (JwtException e) {
             log.debug("Invalid access token!");
         }
 
@@ -44,11 +42,10 @@ public class TokenValidatorImpl implements TokenValidator {
 
     @Override
     public boolean validateRefreshToken(String refreshToken) {
-
         try {
             Jwts.parser().setSigningKey(key).parseClaimsJws(refreshToken);
             return true;
-        } catch(JwtException e) {
+        } catch (JwtException e) {
             log.debug("Invalid refresh token!");
         }
 

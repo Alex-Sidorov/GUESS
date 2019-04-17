@@ -1,6 +1,6 @@
-package com.guess.respository;
+package com.guess.repository;
 
-import com.guess.entity.PictureEntity;
+import com.guess.entity.ImageEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,39 +13,39 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PictureRepository extends JpaRepository<PictureEntity, UUID> {
+public interface ImageRepository extends JpaRepository<ImageEntity, UUID> {
 
-    @Query(value = "SELECT * FROM picture " +
+    @Query(value = "SELECT * FROM image " +
             "WHERE deleted_at IS NULL " +
             "ORDER BY created_at DESC ",
-            countQuery = "SELECT COUNT(id) FROM picture " +
+            countQuery = "SELECT COUNT(id) FROM image " +
                     "WHERE deleted_at IS NULL ",
             nativeQuery = true)
-    Page<PictureEntity> findAllSortedByCreation(Pageable pageable);
+    Page<ImageEntity> findAllSortedByCreation(Pageable pageable);
 
-    @Query(value = "SELECT * FROM picture " +
+    @Query(value = "SELECT * FROM image " +
             "WHERE user_id = :userId " +
             "AND deleted_at IS NULL " +
             "ORDER BY created_at DESC ",
-            countQuery = "SELECT COUNT(id) FROM picture " +
+            countQuery = "SELECT COUNT(id) FROM image " +
                     "WHERE user_id = :userId " +
                     "AND deleted_at IS NULL ",
             nativeQuery = true)
-    Page<PictureEntity> findAllByUserIdSortedByCreation(@Param("userId") UUID userId,
-                                                        Pageable pageable);
+    Page<ImageEntity> findAllByUserIdSortedByCreation(@Param("userId") UUID userId,
+                                                      Pageable pageable);
 
-    @Query(value = "SELECT * FROM picture " +
-            "WHERE id = :pictureId " +
+    @Query(value = "SELECT * FROM image " +
+            "WHERE id = :imageId " +
             "AND deleted_at IS NULL ",
             nativeQuery = true)
-    Optional<PictureEntity> findOneById(@Param("pictureId") UUID pictureId);
+    Optional<ImageEntity> findOneById(@Param("imageId") UUID imageId);
 
     @Modifying
-    @Query(value = "UPDATE picture " +
+    @Query(value = "UPDATE image " +
             "SET deleted_at = now() " +
-            "WHERE id = :pictureId " +
+            "WHERE id = :imageId " +
             "AND deleted_at IS NULL ",
             nativeQuery = true)
-    void softDeleteById(@Param("pictureId") UUID pictureId);
+    void softDeleteById(@Param("imageId") UUID imageId);
 
 }

@@ -8,4 +8,5 @@ public class ServiceUnavailableException extends AbstractThrowableProblem {
     public ServiceUnavailableException(String message) {
         super(ErrorType.SERVICE_UNAVAILABLE, "Service Unavailable", Status.SERVICE_UNAVAILABLE, message);
     }
+
 }

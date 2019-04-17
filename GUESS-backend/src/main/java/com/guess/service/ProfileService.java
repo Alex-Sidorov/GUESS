@@ -1,7 +1,7 @@
 package com.guess.service;
 
 import com.guess.model.ChangePasswordRequest;
-import com.guess.model.Picture;
+import com.guess.model.Image;
 import com.guess.model.User;
 import org.springframework.data.domain.Page;
 
@@ -13,6 +13,6 @@ public interface ProfileService {
 
     void changePassword(ChangePasswordRequest request);
 
-    Page<Picture> getProfilePictures(int page, int size);
+    Page<Image> getProfileImages(int page, int size);
 
 }

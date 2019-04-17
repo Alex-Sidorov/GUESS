@@ -21,12 +21,11 @@ public class TokenFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final String token = httpServletRequest.getHeader(AUTHORIZATION);
         final TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
 
-        if(token != null && tokenValidator.validateAccessToken(token)) {
+        if (token != null && tokenValidator.validateAccessToken(token)) {
             SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
         }
 
@@ -37,4 +36,5 @@ public class TokenFilter implements Filter {
     public void destroy() {
 
     }
+
 }

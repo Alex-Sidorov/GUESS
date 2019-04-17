@@ -1,6 +1,6 @@
 package com.guess.entity;
 
-import com.guess.entity.enums.UserRole;
+import com.guess.entity.enums.UserRoleEntity;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -9,18 +9,19 @@ import java.util.UUID;
 
 import static javax.persistence.EnumType.STRING;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "guess_user")
+@Table(name = "user_")
 public class UserEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", nullable = false, updatable = false, insertable = false)
     private UUID id;
 
     @Column(name = "first_name", nullable = false)
@@ -38,6 +39,6 @@ public class UserEntity extends AuditableEntity {
     @Type(type = "enumType")
     @Enumerated(STRING)
     @Column(name = "role")
-    private UserRole role;
+    private UserRoleEntity role;
 
 }

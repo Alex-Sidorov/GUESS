@@ -1,6 +1,6 @@
 package com.guess.api;
 
-import com.guess.controller.UserApi;
+import com.guess.controller.UsersApi;
 import com.guess.model.User;
 import com.guess.service.UserService;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @AllArgsConstructor
-public class UserApiController implements UserApi {
+public class UsersApiController implements UsersApi {
 
     private final UserService userService;
 
@@ -30,7 +30,6 @@ public class UserApiController implements UserApi {
     public ResponseEntity<List<User>> getUsers(
             @Min(1) @Valid @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @Min(10) @Max(30) @Valid @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-
         final Page<User> usersPage = userService.getUsers(page, size);
         final HttpHeaders headers = createPaginationHeaders(usersPage, getUsersPath);
         return new ResponseEntity<>(usersPage.getContent(), headers, OK);
@@ -38,7 +37,6 @@ public class UserApiController implements UserApi {
 
     @Override
     public ResponseEntity<User> getUser(@PathVariable("userId") UUID userId) {
-
         final User user = userService.getUser(userId);
         return new ResponseEntity<>(user, OK);
     }

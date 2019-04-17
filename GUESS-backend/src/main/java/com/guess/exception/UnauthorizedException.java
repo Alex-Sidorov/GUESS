@@ -8,4 +8,5 @@ public class UnauthorizedException extends AbstractThrowableProblem {
     public UnauthorizedException(String message) {
         super(ErrorType.UNAUTHORIZED, "Unauthorized", Status.UNAUTHORIZED, message);
     }
+
 }

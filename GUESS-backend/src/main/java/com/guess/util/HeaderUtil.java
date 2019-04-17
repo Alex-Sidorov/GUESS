@@ -5,14 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.guess.model.enums.HttpHeader.X_TOTAL_COUNT;
+import static com.guess.util.enums.HttpHeader.X_TOTAL_COUNT;
 import static org.springframework.http.HttpHeaders.LINK;
 
 @UtilityClass
 public class HeaderUtil {
 
     public static <T> HttpHeaders createPaginationHeaders(Page<T> page, String methodPath) {
-
         return buildHeaders(page, UriComponentsBuilder.fromUriString(methodPath).toUriString());
     }
 
@@ -22,12 +21,11 @@ public class HeaderUtil {
     }
 
     private static <T> HttpHeaders buildHeaders(Page<T> page, String baseUri) {
-
         String link = "<" + buildPageUri(baseUri, 1, page.getSize()) + ">; rel=\"first\", ";
-        if(page.hasPrevious()) {
+        if (page.hasPrevious()) {
             link += "<" + buildPageUri(baseUri, page.getNumber(), page.getSize()) + ">; rel=\"prev\", ";
         }
-        if(page.hasNext()) {
+        if (page.hasNext()) {
             link += "<" + buildPageUri(baseUri, page.getNumber() + 2, page.getSize()) + ">; rel=\"next\", ";
         }
         int lastPage = page.getTotalPages() == 0 ? 1 : page.getTotalPages();
@@ -40,7 +38,6 @@ public class HeaderUtil {
     }
 
     private static String buildPageUri(String baseUri, int page, int size) {
-
         return UriComponentsBuilder.fromUriString(baseUri)
                 .queryParam("page", page)
                 .queryParam("size", size)

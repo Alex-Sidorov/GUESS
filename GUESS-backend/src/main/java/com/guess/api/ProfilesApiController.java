@@ -2,7 +2,7 @@ package com.guess.api;
 
 import com.guess.controller.ProfileApi;
 import com.guess.model.ChangePasswordRequest;
-import com.guess.model.Picture;
+import com.guess.model.Image;
 import com.guess.model.User;
 import com.guess.service.ProfileService;
 import lombok.AllArgsConstructor;
@@ -23,39 +23,35 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @AllArgsConstructor
-public class ProfileApiController implements ProfileApi {
+public class ProfilesApiController implements ProfileApi {
 
     private final ProfileService profileService;
 
     @Override
     public ResponseEntity<User> getProfile() {
-
         final User user = profileService.getProfile();
         return new ResponseEntity<>(user, OK);
     }
 
     @Override
     public ResponseEntity<User> updateProfile(@Valid @RequestBody User updateRequest) {
-
         final User user = profileService.updateProfile(updateRequest);
         return new ResponseEntity<>(user, OK);
     }
 
     @Override
     public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
-
         profileService.changePassword(changePasswordRequest);
         return new ResponseEntity<>(OK);
     }
 
     @Override
-    public ResponseEntity<List<Picture>> getProfilePictures(
+    public ResponseEntity<List<Image>> getProfileImages(
             @Min(1) @Valid @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @Min(10) @Max(30) @Valid @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-
-        final Page<Picture> picturesPage = profileService.getProfilePictures(page, size);
-        final HttpHeaders headers = createPaginationHeaders(picturesPage, getProfilePicturesPath);
-        return new ResponseEntity<>(picturesPage.getContent(), headers, OK);
+        final Page<Image> imagesPage = profileService.getProfileImages(page, size);
+        final HttpHeaders headers = createPaginationHeaders(imagesPage, getProfileImagesPath);
+        return new ResponseEntity<>(imagesPage.getContent(), headers, OK);
     }
 
 }

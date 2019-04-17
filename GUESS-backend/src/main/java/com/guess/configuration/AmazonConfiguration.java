@@ -8,6 +8,8 @@ import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,14 +22,12 @@ public class AmazonConfiguration {
 
     @Bean
     public AWSCredentialsProvider awsCredentialsProvider() {
-
         return new AWSStaticCredentialsProvider(new BasicAWSCredentials(appConfiguration.getAmazon().getAccessKey(),
                 appConfiguration.getAmazon().getSecretKey()));
     }
 
     @Bean
     public AmazonS3 amazonS3(AWSCredentialsProvider credentialsProvider) {
-
         final AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
         builder.withCredentials(credentialsProvider);
 
@@ -44,8 +44,14 @@ public class AmazonConfiguration {
     }
 
     @Bean
-    public AmazonRekognition amazonRekognition(AWSCredentialsProvider credentialsProvider) {
+    public TransferManager transferManager(AmazonS3 amazonS3) {
+        return TransferManagerBuilder.standard()
+                .withS3Client(amazonS3)
+                .build();
+    }
 
+    @Bean
+    public AmazonRekognition amazonRekognition(AWSCredentialsProvider credentialsProvider) {
         final AmazonRekognitionClientBuilder builder = AmazonRekognitionClientBuilder.standard();
         builder.withCredentials(credentialsProvider);
         builder.withRegion(appConfiguration.getAmazon().getS3().getRegion());

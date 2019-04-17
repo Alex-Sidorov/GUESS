@@ -13,14 +13,15 @@ public class BeanConfiguration {
 
     @Bean
     public Yaml yaml() {
-
         LoaderOptions options = new LoaderOptions();
         options.setAllowDuplicateKeys(false);
         return new Yaml(options);
     }
 
     @Bean
-    public RestTemplate restTemplate() { return new RestTemplate(); }
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     @Bean
     public ProblemModule problemModule() {

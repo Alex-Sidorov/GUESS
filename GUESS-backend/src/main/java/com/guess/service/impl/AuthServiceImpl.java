@@ -4,7 +4,7 @@ import com.guess.entity.UserEntity;
 import com.guess.exception.ConflictException;
 import com.guess.exception.UnauthorizedException;
 import com.guess.model.*;
-import com.guess.respository.UserRepository;
+import com.guess.repository.UserRepository;
 import com.guess.security.TokenProvider;
 import com.guess.security.TokenValidator;
 import com.guess.service.AuthService;
@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.guess.util.converter.UserConverter.toUserEntity;
-import static com.guess.util.converter.UserConverter.toUserModel;
+import static com.guess.entity.enums.UserRoleEntity.USER;
+import static com.guess.mapper.UserMapper.USER_MAPPER;
 
 @Service
 @AllArgsConstructor
@@ -30,19 +30,21 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public User signUp(SignupRequest request) {
-
-        if (userRepository.findOneByEmail(request.getEmail().toLowerCase()).isPresent()) {
+        if (userRepository.findOneByEmail(request.getEmail()).isPresent()) {
             throw new ConflictException("User with the same email already exist!");
         }
-        return toUserModel(userRepository.saveAndFlush(toUserEntity(request, encoder.encode(request.getPassword()))));
+        final UserEntity user = USER_MAPPER.toEntity(request);
+        user.setHashPassword(encoder.encode(request.getPassword()));
+        user.setRole(USER);
+        final UserEntity savedUser = userRepository.saveAndFlush(user);
+        return USER_MAPPER.toModel(savedUser);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public TokenModel signIn(SigninRequest request) {
-
-        final Optional<UserEntity> user = userRepository.findOneByEmail(request.getEmail().toLowerCase());
-        if(user.isPresent() && encoder.matches(request.getPassword(), user.get().getHashPassword())) {
+        final Optional<UserEntity> user = userRepository.findOneByEmail(request.getEmail());
+        if (user.isPresent() && encoder.matches(request.getPassword(), user.get().getHashPassword())) {
             return tokenProvider.createTokenModel(user.get());
         }
         throw new UnauthorizedException("User with this credentials was not found!");
@@ -50,8 +52,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenModel refreshToken(RefreshTokenRequest request) {
-
-        if(tokenValidator.validateRefreshToken(request.getRefreshToken())) {
+        if (tokenValidator.validateRefreshToken(request.getRefreshToken())) {
             return tokenProvider.refreshToken(request.getRefreshToken());
         }
         throw new UnauthorizedException("Invalid refresh token!");

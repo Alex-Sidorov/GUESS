@@ -1,7 +1,7 @@
 package com.guess.security.impl;
 
 import com.guess.entity.UserEntity;
-import com.guess.entity.enums.UserRole;
+import com.guess.entity.enums.UserRoleEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +13,7 @@ import java.util.UUID;
 public class UserDetailsImpl implements UserDetails {
 
     private final UUID userId;
-    private final UserRole role;
+    private final UserRoleEntity role;
 
     public UserDetailsImpl(UserEntity userEntity) {
 
@@ -60,7 +60,7 @@ public class UserDetailsImpl implements UserDetails {
         return this.userId;
     }
 
-    public UserRole getUserRole() {
+    public UserRoleEntity getUserRole() {
         return this.role;
     }
 

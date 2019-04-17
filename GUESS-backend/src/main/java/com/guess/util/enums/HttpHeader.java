@@ -1,4 +1,4 @@
-package com.guess.model.enums;
+package com.guess.util.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

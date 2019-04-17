@@ -18,4 +18,5 @@ class ErrorType {
     static URI FORBIDDEN = URI.create(BASE_URL + "/forbidden");
     static URI UNPROCESSABLE_ENTITY = URI.create(BASE_URL + "/unprocessable-entity");
     static URI SERVICE_UNAVAILABLE = URI.create(BASE_URL + "/service-unavailable");
+
 }

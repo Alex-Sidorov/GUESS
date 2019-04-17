@@ -11,10 +11,10 @@ app:
 
     s3:
       region: "${AMAZON_S3_REGION:}"
-      bucket-name: "${AMAZON_S3_BUCKET_NAME:}"
+      images-bucket-name: "${AMAZON_S3_BUCKET_NAME:}"
 
     cloudfront:
-      host-name: "${AMAZON_CLOUDFRONT_HOST_NAME:}"
+      images-url: "${AMAZON_CLOUDFRONT_HOST_NAME:}"
 
 spring:
   datasource:
@@ -57,7 +57,7 @@ app:
 
     s3:
       region: "eu-central-1"
-      bucket-name: "guess-images"
+      images-bucket-name: "guess-images"
 
     cloudfront:
-      host-name: "d176hzxhkgkfa3.cloudfront.net"
+      images-url: "d176hzxhkgkfa3.cloudfront.net"

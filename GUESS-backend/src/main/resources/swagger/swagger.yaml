@@ -9,26 +9,27 @@ produces: ["application/json"]
 basePath: /api/v1
 
 tags:
-  - name: Auth
-  - name: Profile
-  - name: User
-  - name: Picture
+- name: Auth
+- name: Profile
+- name: Users
+- name: Images
 
 paths:
-#======================================== [Auth API]
+  #======================================== [Auth API]
+
   "/auth/signup":
     post:
       tags: [Auth]
       operationId: signUp
       security: []
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - in: body
-          name: signupRequest
-          required: true
-          schema:
-            "$ref": "#/definitions/SignupRequest"
+      - in: body
+        name: signupRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/SignupRequest"
       responses:
         "201":
           description: Created
@@ -43,13 +44,13 @@ paths:
       operationId: signIn
       security: []
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - in: body
-          name: signinRequest
-          required: true
-          schema:
-            "$ref": "#/definitions/SigninRequest"
+      - in: body
+        name: signinRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/SigninRequest"
       responses:
         "201":
           description: Created
@@ -66,13 +67,13 @@ paths:
       operationId: refreshToken
       security: []
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - in: body
-          name: refreshRequest
-          required: true
-          schema:
-            "$ref": "#/definitions/RefreshTokenRequest"
+      - in: body
+        name: refreshRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/RefreshTokenRequest"
       responses:
         "201":
           description: Created
@@ -82,15 +83,15 @@ paths:
           $ref: "#/responses/BadRequest"
         "401":
           $ref: "#/responses/Unauthorized"
-#========================================
 
-#======================================== [Account API]
+  #======================================== [Profile API]
+
   "/profile":
     get:
       tags: [Profile]
       operationId: getProfile
       security:
-        - userAuth: []
+      - userAuth: []
       responses:
         "200":
           description: OK
@@ -98,20 +99,19 @@ paths:
             "$ref": "#/definitions/User"
         "401":
           $ref: "#/responses/Unauthorized"
-
     put:
       tags: [Profile]
       operationId: updateProfile
       security:
-        - userAuth: []
+      - userAuth: []
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - in: body
-          name: updateRequest
-          required: true
-          schema:
-            "$ref": "#/definitions/User"
+      - in: body
+        name: updateRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/User"
       responses:
         "200":
           description: OK
@@ -127,15 +127,15 @@ paths:
       tags: [Profile]
       operationId: changePassword
       security:
-        - userAuth: []
+      - userAuth: []
       consumes:
-        - application/json
+      - application/json
       parameters:
-        - in: body
-          name: changePasswordRequest
-          required: true
-          schema:
-            "$ref": "#/definitions/ChangePasswordRequest"
+      - in: body
+        name: changePasswordRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/ChangePasswordRequest"
       responses:
         "200":
           description: OK
@@ -144,36 +144,35 @@ paths:
         "401":
           $ref: "#/responses/Unauthorized"
 
-  "/profile/pictures":
+  "/profile/images":
     get:
       tags: [Profile]
-      operationId: getProfilePictures
+      operationId: getProfileImages
       security:
-        - userAuth: []
+      - userAuth: []
       parameters:
-        - $ref: "#/parameters/PageQueryParameter"
-        - $ref: "#/parameters/SizeQueryParameter"
+      - $ref: "#/parameters/PageQueryParameter"
+      - $ref: "#/parameters/SizeQueryParameter"
       responses:
         "200":
           description: OK
           schema:
             type: array
             items:
-              "$ref": "#/definitions/Picture"
+              "$ref": "#/definitions/Image"
         "401":
           $ref: "#/responses/Unauthorized"
-#========================================
 
-#======================================== [User API]
+  #======================================== [Users API]
   "/users":
     get:
-      tags: [User]
+      tags: [Users]
       operationId: getUsers
       security:
-        - userAuth: []
+      - userAuth: []
       parameters:
-        - $ref: "#/parameters/PageQueryParameter"
-        - $ref: "#/parameters/SizeQueryParameter"
+      - $ref: "#/parameters/PageQueryParameter"
+      - $ref: "#/parameters/SizeQueryParameter"
       responses:
         "200":
           description: OK
@@ -186,16 +185,16 @@ paths:
 
   "/users/{userId}":
     parameters:
-      - in: path
-        name: userId
-        required: true
-        type: string
-        format: uuid
+    - in: path
+      name: userId
+      required: true
+      type: string
+      format: uuid
     get:
-      tags: [User]
+      tags: [Users]
       operationId: getUser
       security:
-        - userAuth: []
+      - userAuth: []
       responses:
         "200":
           description: OK
@@ -205,77 +204,75 @@ paths:
           $ref: "#/responses/BadRequest"
         "401":
           $ref: "#/responses/Unauthorized"
-#========================================
 
-#======================================== [Picture API]
-  "/pictures":
+  #======================================== [Images API]
+
+  "/images":
     get:
-      tags: [Picture]
-      operationId: getPictures
+      tags: [Images]
+      operationId: getAllImages
       security:
-        - userAuth: []
+      - userAuth: []
       parameters:
-        - $ref: "#/parameters/PageQueryParameter"
-        - $ref: "#/parameters/SizeQueryParameter"
+      - $ref: "#/parameters/PageQueryParameter"
+      - $ref: "#/parameters/SizeQueryParameter"
       responses:
         "200":
           description: OK
           schema:
             type: array
             items:
-              "$ref": "#/definitions/Picture"
+              "$ref": "#/definitions/Image"
         "401":
           $ref: "#/responses/Unauthorized"
-
     post:
-      tags: [Picture]
-      operationId: uploadPicture
+      tags: [Images]
+      operationId: uploadImage
       security:
-        - userAuth: []
+      - userAuth: []
       consumes:
-        - multipart/form-data
+      - multipart/form-data
       parameters:
-        - in: formData
-          name: file
-          type: file
-          required: true
+      - in: formData
+        name: file
+        type: file
+        required: true
       responses:
         "201":
           description: Created
           schema:
-            "$ref": "#/definitions/Picture"
+            "$ref": "#/definitions/Image"
         "400":
           $ref: "#/responses/BadRequest"
         "401":
           $ref: "#/responses/Unauthorized"
 
-  "/pictures/{pictureId}":
+  "/images/{imageId}":
     parameters:
-      - in: path
-        name: pictureId
-        required: true
-        type: string
-        format: uuid
+    - in: path
+      name: imageId
+      required: true
+      type: string
+      format: uuid
     get:
-      tags: [Picture]
-      operationId: getPicture
+      tags: [Images]
+      operationId: getImage
       security:
-        - userAuth: []
+      - userAuth: []
       responses:
         "200":
           description: OK
           schema:
-            "$ref": "#/definitions/Picture"
+            "$ref": "#/definitions/Image"
         "400":
           $ref: "#/responses/BadRequest"
         "401":
           $ref: "#/responses/Unauthorized"
-
     delete:
-      tags: [Picture]
-      operationId: deletePicture
+      tags: [Images]
+      operationId: deleteImage
       security:
-        - userAuth: []
+      - userAuth: []
       responses:
         "204":
           description: No Content
@@ -283,6 +280,7 @@ paths:
           $ref: "#/responses/BadRequest"
         "401":
           $ref: "#/responses/Unauthorized"
+
 #========================================
 
 definitions:
@@ -320,8 +318,8 @@ definitions:
   UserRole:
     type: string
     enum:
-      - "USER"
-      - "ADMIN"
+    - "USER"
+    - "ADMIN"
 
   TokenModel:
     type: object
@@ -354,10 +352,10 @@ definitions:
   SignupRequest:
     type: object
     required:
-      - firstName
-      - lastName
-      - email
-      - password
+    - firstName
+    - lastName
+    - email
+    - password
     properties:
       firstName:
         type: string
@@ -385,8 +383,8 @@ definitions:
   SigninRequest:
     type: object
     required:
-      - email
-      - password
+    - email
+    - password
     properties:
       email:
         type: string
@@ -404,8 +402,8 @@ definitions:
   User:
     type: object
     required:
-      - firstName
-      - lastName
+    - firstName
+    - lastName
     properties:
       id:
         type: string
@@ -421,12 +419,14 @@ definitions:
         type: string
         example: "user@gmail.com"
         readOnly: true
+      role:
+        $ref: "#/definitions/UserRole"
 
   ChangePasswordRequest:
     type: object
     required:
-      - currentPassword
-      - newPassword
+    - currentPassword
+    - newPassword
     properties:
       currentPassword:
         type: string
@@ -441,12 +441,14 @@ definitions:
         maxLength: 254
         example: "str1ng"
 
-  Picture:
+  Image:
     type: object
     properties:
       id:
         type: string
         format: uuid
+      filename:
+        type: string
       url:
         type: string
 

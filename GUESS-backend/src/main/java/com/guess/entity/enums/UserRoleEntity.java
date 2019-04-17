@@ -1,6 +1,6 @@
 package com.guess.entity.enums;
 
-public enum UserRole {
+public enum UserRoleEntity {
 
     USER,
     ADMIN,

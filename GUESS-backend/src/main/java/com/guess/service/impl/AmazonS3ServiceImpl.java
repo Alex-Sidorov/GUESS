@@ -2,6 +2,8 @@ package com.guess.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.transfer.TransferManager;
 import com.guess.configuration.AppConfiguration;
 import com.guess.service.AmazonS3Service;
 import lombok.AllArgsConstructor;
@@ -18,30 +20,33 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     private final AmazonS3 amazonS3;
     private final AppConfiguration appConfiguration;
+    private final TransferManager transferManager;
 
     @Override
     @SneakyThrows
-    public void uploadToAmazon(MultipartFile file, String filename) {
-
+    public void upload(MultipartFile file, String filename, String bucketName) {
         final ObjectMetadata metadata = buildObjectMetadata(file);
-        amazonS3.putObject(appConfiguration.getAmazon().getS3().getBucketName(),
-                filename, file.getInputStream(), metadata);
+        final PutObjectRequest request = new PutObjectRequest(bucketName, filename, file.getInputStream(), metadata);
+        transferManager.upload(request);
     }
 
     @Override
     @SneakyThrows
-    public String getFileUrl(String filename) {
-
-        final URL originUrl = amazonS3.getUrl(appConfiguration.getAmazon().getS3().getBucketName(), filename);
+    public String getFileUrl(String filename, String bucketName, String publicHost) {
+        final URL originUrl = amazonS3.getUrl(bucketName, filename);
         return UriComponentsBuilder.fromUri(originUrl.toURI())
                 .scheme("https")
-                .host(appConfiguration.getAmazon().getCloudFront().getHostName())
+                .host(publicHost)
                 .build()
                 .toUriString();
     }
 
-    private ObjectMetadata buildObjectMetadata(MultipartFile file) {
+    @Override
+    public void delete(String filename, String bucketName) {
+        amazonS3.deleteObject(bucketName, filename);
+    }
 
+    private ObjectMetadata buildObjectMetadata(MultipartFile file) {
         final ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
         metadata.setContentType(file.getContentType());

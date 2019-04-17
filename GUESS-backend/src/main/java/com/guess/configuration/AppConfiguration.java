@@ -24,6 +24,7 @@ public class AppConfiguration {
 
         private long accessTokenValidity;
         private long refreshTokenValidity;
+
     }
 
     @Getter
@@ -42,15 +43,18 @@ public class AppConfiguration {
 
             private String endpoint;
             private String region;
-            private String bucketName;
+            private String imagesBucketName;
+
         }
 
         @Getter
         @Setter
         public static class CloudFront {
 
-            private String hostName;
+            private String imagesUrl;
+
         }
+
     }
 
 }
