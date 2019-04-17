@@ -1,0 +1,7 @@
+venv
+*idea
+*.zip
+*tar.gz
+*ssd*
+
+__pycache__
