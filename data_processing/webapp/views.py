@@ -23,6 +23,17 @@ class RecognitionView:
         resp.body = response
 
 
+class RecognitionOldView:
+
+    def on_post(self, req, resp):
+
+        image = req.bounded_stream
+        raw_response = recognize(image)
+        response = serializer(raw_response)
+
+        resp.body = response
+
+
 class LabelsView:
     PATH_TO_LABELS = 'recognition/v2_labels.pbtxt'
 

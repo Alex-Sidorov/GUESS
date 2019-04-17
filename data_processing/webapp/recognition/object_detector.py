@@ -1,29 +1,19 @@
-from operator import itemgetter
+import os
 
 import numpy as np
-import os
-import six.moves.urllib as urllib
-import tarfile
-from matplotlib import pyplot as plt
-# import cv2
-
 from PIL import Image
-
 import tensorflow as tf
 
 from object_detection.utils import ops as utils_ops
-
 from object_detection.utils import label_map_util
-
 from object_detection.utils import visualization_utils as vis_util
 
 MODEL_NAME = 'v2_03_graph'
-
 PATH_TO_FROZEN_GRAPH = os.path.join('recognition', MODEL_NAME + '/frozen_inference_graph.pb')
-
 PATH_TO_LABELS = 'recognition/v2_labels.pbtxt'
 
 IMAGE_SIZE = (12, 8)
+
 
 def load_image_into_numpy_array(image):
     (im_width, im_height) = image.size
@@ -80,17 +70,6 @@ def run_inference_for_single_image(image, graph):
 
 def recognize(image):
 
-    # opener = urllib.request.URLopener()
-    # opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
-    # tar_file = tarfile.open(MODEL_FILE)
-    # for file in tar_file.getmembers():
-    #     file_name = os.path.basename(file.name)
-    #     if 'frozen_inference_graph.pb' in file_name:
-    #         tar_file.extract(file, os.getcwd())
-
-    # with open(PATH_TO_FROZEN_GRAPH, 'rb') as f:
-    #     print('opened')
-
     detection_graph = tf.Graph()
     with detection_graph.as_default():
         od_graph_def = tf.GraphDef()
@@ -103,8 +82,6 @@ def recognize(image):
 
     image = Image.open(image)
     image_np = load_image_into_numpy_array(image)
-    # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-    image_np_expanded = np.expand_dims(image_np, axis=0)
 
     # Actual detection.
     output_dict = run_inference_for_single_image(image_np, detection_graph)
@@ -112,17 +89,6 @@ def recognize(image):
     raw_results = list(filter(lambda x: x[0] > 0.5, zip(output_dict['detection_scores'],
                                                         output_dict['detection_classes'])))
     result = [(category_index[res[1]]['name'], float(res[0])) for res in raw_results]
-
-    # Visualize on picture
-    # vis_util.visualize_boxes_and_labels_on_image_array(
-    #     image_np,
-    #     output_dict['detection_boxes'],
-    #     output_dict['detection_classes'],
-    #     output_dict['detection_scores'],
-    #     category_index,
-    #     instance_masks=output_dict.get('detection_masks'),
-    #     use_normalized_coordinates=True,
-    #     line_thickness=8)
 
     return result
 
@@ -136,14 +102,6 @@ if __name__ == '__main__':
     PATH_TO_FROZEN_GRAPH = MODEL_NAME + '/frozen_inference_graph.pb'
 
     PATH_TO_LABELS = '/home/elchin/PycharmProjects/GUESS/data_processing/webapp/research/object_detection/data/mscoco_label_map.pbtxt'
-    #
-    # opener = urllib.request.URLopener()
-    # opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
-    # tar_file = tarfile.open(MODEL_FILE)
-    # for file in tar_file.getmembers():
-    #     file_name = os.path.basename(file.name)
-    #     if 'frozen_inference_graph.pb' in file_name:
-    #         tar_file.extract(file, os.getcwd())
 
     detection_graph = tf.Graph()
     with detection_graph.as_default():

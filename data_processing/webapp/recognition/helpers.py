@@ -4,7 +4,6 @@ import urllib.request as urllib_request
 
 
 def download_model(download_base, model_file):
-
     opener = urllib_request.urlopen(download_base + model_file)
     model_file = opener.read()
     # opener.retrieve(download_base + model_file, model_file)
