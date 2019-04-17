@@ -1,0 +1,49 @@
+import com.guess.build.SwaggerGenerateTask
+
+def inputSpec = file("src/main/resources/swagger/swagger.yaml")
+def outputDir = file("build/swagger")
+
+task generateApi(type: SwaggerGenerateTask) {
+    inputSpecPath = inputSpec.path
+    outputDirPath = outputDir.path
+    apiPackage = basePackage + ".controller"
+    modelPackage = basePackage + ".model"
+}
+
+clean.doFirst {
+    delete(outputDir)
+}
+
+configurations {
+    swagger
+}
+
+sourceSets {
+    swagger {
+        compileClasspath = configurations.swaggerCompile
+        java {
+            srcDir file("${project.buildDir.path}/swagger/src/main/java")
+        }
+    }
+    main {
+        compileClasspath += swagger.output
+        runtimeClasspath += swagger.output
+    }
+    test {
+        compileClasspath += swagger.output
+        runtimeClasspath += swagger.output
+    }
+}
+
+ext {
+    swaggerAnnotationsVersion = "1.5.21"
+}
+
+dependencies {
+    swaggerCompile "io.swagger:swagger-annotations:${swaggerAnnotationsVersion}"
+    swaggerCompile("org.springframework.boot:spring-boot-starter-web")
+}
+
+compileSwaggerJava.dependsOn generateApi
+classes.dependsOn swaggerClasses
+compileJava.dependsOn compileSwaggerJava
