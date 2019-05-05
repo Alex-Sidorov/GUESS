@@ -7,3 +7,5 @@
 [UX](https://github.com/Alex-Sidorov/GUESS/tree/master/UX)
 
 [Technical debt](https://github.com/Alex-Sidorov/GUESS/tree/master/TECHNICAL%20DEBT)
+
+[Pair Programming](https://github.com/Alex-Sidorov/GUESS/tree/master/Pair%20Programming)
