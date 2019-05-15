@@ -1,0 +1,59 @@
+---
+app:
+  jwt:
+    access-token-validity: 3600     # 1 hour in seconds
+    refresh-token-validity: 86400   # 24 hours in seconds
+    base64-secret: "${JWT_BASE64_SECRET:}"
+
+  amazon:
+    access-key: "${AMAZON_ACCESS_KEY:}"
+    secret-key: "${AMAZON_SECRET_KEY:}"
+
+    s3:
+      region: "${AMAZON_S3_REGION:}"
+      images-bucket-name: "${AMAZON_S3_BUCKET_NAME:}"
+
+    cloudfront:
+      images-url: "${AMAZON_CLOUDFRONT_HOST_NAME:}"
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "${SPRING_DATASOURCE_URL:}"
+    username: "${SPRING_DATASOURCE_USERNAME:}"
+    password: "${SPRING_DATASOURCE_PASSWORD:}"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+---
+spring:
+  profiles: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username:
+    password:
+    url: jdbc:postgresql://localhost:5432/guess_db
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    base64-secret: "2BIMHtZJKdfpGpESKHhq1AEjjzCoU4LPqZID0Nkf9f50EQbqLkly0Epg8fqqOpxMmQmxNT4DyCUfK3G1ME+LFw=="
+
+    s3:
+      region: "eu-central-1"
+      images-bucket-name: "guess-images"
+
+    cloudfront:
+      images-url: "d176hzxhkgkfa3.cloudfront.net"

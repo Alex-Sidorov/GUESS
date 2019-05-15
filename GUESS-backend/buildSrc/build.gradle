@@ -1,0 +1,17 @@
+apply plugin: "java"
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    swaggerCodegenVersion = "2.3.1"
+}
+
+dependencies {
+    compile("io.swagger:swagger-codegen:${swaggerCodegenVersion}") {
+        exclude group: "ch.qos.cal10n", module: "cal10n-controller"
+    }
+}

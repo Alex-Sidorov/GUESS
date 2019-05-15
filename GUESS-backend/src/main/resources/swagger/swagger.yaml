@@ -1,0 +1,511 @@
+swagger: "2.0"
+info:
+  title: GUESS
+  version: "0.1"
+  description: GUESS - API
+
+produces: ["application/json"]
+
+basePath: /api/v1
+
+tags:
+- name: Auth
+- name: Profile
+- name: Users
+- name: Images
+
+paths:
+  #======================================== [Auth API]
+
+  "/auth/signup":
+    post:
+      tags: [Auth]
+      operationId: signUp
+      security: []
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: signupRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/SignupRequest"
+      responses:
+        "201":
+          description: Created
+          schema:
+            "$ref": "#/definitions/User"
+        "400":
+          $ref: "#/responses/BadRequest"
+
+  "/auth/signin":
+    post:
+      tags: [Auth]
+      operationId: signIn
+      security: []
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: signinRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/SigninRequest"
+      responses:
+        "201":
+          description: Created
+          schema:
+            "$ref": "#/definitions/TokenModel"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/auth/refresh-token":
+    post:
+      tags: [Auth]
+      operationId: refreshToken
+      security: []
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: refreshRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/RefreshTokenRequest"
+      responses:
+        "201":
+          description: Created
+          schema:
+            "$ref": "#/definitions/TokenModel"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  #======================================== [Profile API]
+
+  "/profile":
+    get:
+      tags: [Profile]
+      operationId: getProfile
+      security:
+      - userAuth: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/User"
+        "401":
+          $ref: "#/responses/Unauthorized"
+    put:
+      tags: [Profile]
+      operationId: updateProfile
+      security:
+      - userAuth: []
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: updateRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/User"
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/User"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/profile/change-password":
+    put:
+      tags: [Profile]
+      operationId: changePassword
+      security:
+      - userAuth: []
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: changePasswordRequest
+        required: true
+        schema:
+          "$ref": "#/definitions/ChangePasswordRequest"
+      responses:
+        "200":
+          description: OK
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/profile/images":
+    get:
+      tags: [Profile]
+      operationId: getProfileImages
+      security:
+      - userAuth: []
+      parameters:
+      - $ref: "#/parameters/PageQueryParameter"
+      - $ref: "#/parameters/SizeQueryParameter"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Image"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  #======================================== [Users API]
+  "/users":
+    get:
+      tags: [Users]
+      operationId: getUsers
+      security:
+      - userAuth: []
+      parameters:
+      - $ref: "#/parameters/PageQueryParameter"
+      - $ref: "#/parameters/SizeQueryParameter"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/User"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/users/{userId}":
+    parameters:
+    - in: path
+      name: userId
+      required: true
+      type: string
+      format: uuid
+    get:
+      tags: [Users]
+      operationId: getUser
+      security:
+      - userAuth: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/User"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  #======================================== [Images API]
+
+  "/images":
+    get:
+      tags: [Images]
+      operationId: getAllImages
+      security:
+      - userAuth: []
+      parameters:
+      - $ref: "#/parameters/PageQueryParameter"
+      - $ref: "#/parameters/SizeQueryParameter"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Image"
+        "401":
+          $ref: "#/responses/Unauthorized"
+    post:
+      tags: [Images]
+      operationId: uploadImage
+      security:
+      - userAuth: []
+      consumes:
+      - multipart/form-data
+      parameters:
+      - in: formData
+        name: file
+        type: file
+        required: true
+      responses:
+        "201":
+          description: Created
+          schema:
+            "$ref": "#/definitions/Image"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+  "/images/{imageId}":
+    parameters:
+    - in: path
+      name: imageId
+      required: true
+      type: string
+      format: uuid
+    get:
+      tags: [Images]
+      operationId: getImage
+      security:
+      - userAuth: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/definitions/Image"
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+    delete:
+      tags: [Images]
+      operationId: deleteImage
+      security:
+      - userAuth: []
+      responses:
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/responses/BadRequest"
+        "401":
+          $ref: "#/responses/Unauthorized"
+
+#========================================
+
+definitions:
+  Problem:
+    type: object
+    properties:
+      type:
+        type: string
+        format: uri
+      title:
+        type: string
+      status:
+        type: integer
+        format: int32
+        minimum: 100
+        maximum: 600
+      detail:
+        type: string
+      instance:
+        type: string
+        format: uri
+      violations:
+        type: array
+        items:
+          $ref: "#/definitions/Violation"
+
+  Violation:
+    type: object
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+
+  UserRole:
+    type: string
+    enum:
+    - "USER"
+    - "ADMIN"
+
+  TokenModel:
+    type: object
+    properties:
+      accessToken:
+        type: string
+      accessIssuedAt:
+        type: integer
+        format: int64
+      accessExpiresIn:
+        type: integer
+        format: int64
+      refreshToken:
+        type: string
+      refreshIssuedAt:
+        type: integer
+        format: int64
+      refreshExpiresIn:
+        type: integer
+        format: int64
+
+  RefreshTokenRequest:
+    type: object
+    required:
+    - refreshToken
+    properties:
+      refreshToken:
+        type: string
+
+  SignupRequest:
+    type: object
+    required:
+    - firstName
+    - lastName
+    - email
+    - password
+    properties:
+      firstName:
+        type: string
+        minLength: 3
+        maxLength: 50
+        example: "Jeff"
+      lastName:
+        type: string
+        minLength: 3
+        maxLength: 50
+        example: "Bezos"
+      email:
+        type: string
+        format: email
+        minLength: 5
+        maxLength: 254
+        example: "user@gmail.com"
+      password:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+
+  SigninRequest:
+    type: object
+    required:
+    - email
+    - password
+    properties:
+      email:
+        type: string
+        format: email
+        minLength: 5
+        maxLength: 254
+        example: "user@gmail.com"
+      password:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+
+  User:
+    type: object
+    required:
+    - firstName
+    - lastName
+    properties:
+      id:
+        type: string
+        format: uuid
+        readOnly: true
+      firstName:
+        type: string
+        example: "Jeff"
+      lastName:
+        type: string
+        example: "Bezos"
+      email:
+        type: string
+        example: "user@gmail.com"
+        readOnly: true
+      role:
+        $ref: "#/definitions/UserRole"
+
+  ChangePasswordRequest:
+    type: object
+    required:
+    - currentPassword
+    - newPassword
+    properties:
+      currentPassword:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+      newPassword:
+        type: string
+        format: password
+        minLength: 4
+        maxLength: 254
+        example: "str1ng"
+
+  Image:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      filename:
+        type: string
+      url:
+        type: string
+
+responses:
+  BadRequest:
+    description: Bad Request
+    schema:
+      $ref: "#/definitions/Problem"
+
+  UnsupportedMediaType:
+    description: Unsupported Media Type
+    schema:
+      $ref: "#/definitions/Problem"
+
+  Unauthorized:
+    description: Unauthorized
+    schema:
+      $ref: "#/definitions/Problem"
+
+  Forbidden:
+    description: Forbidden
+    schema:
+      $ref: "#/definitions/Problem"
+
+  NotFound:
+    description: Not Found
+    schema:
+      $ref: "#/definitions/Problem"
+
+  Conflict:
+    description: Conflict
+    schema:
+      $ref: "#/definitions/Problem"
+
+  UnprocessableEntity:
+    description: Unprocessable Entity
+    schema:
+      $ref: "#/definitions/Problem"
+
+parameters:
+  PageQueryParameter:
+    name: page
+    in: query
+    type: integer
+    default: 1
+    minimum: 1
+
+  SizeQueryParameter:
+    name: size
+    in: query
+    type: integer
+    default: 10
+    minimum: 10
+    maximum: 30
+
+securityDefinitions:
+  userAuth:
+    type: apiKey
+    in: header
+    name: Authorization

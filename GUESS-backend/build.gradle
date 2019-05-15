@@ -1,0 +1,82 @@
+buildscript {
+    ext {
+        awsSdkVersion = "1.11.473"
+        javafakerVersion = "0.16"
+        jjwtVersion = "0.10.5"
+        hibernateTypes52Version = "2.4.0"
+        hibernateVersion = "5.2.17.Final"
+        problemVersion = "0.24.0-RC.0"
+        springBootVersion = "2.0.6.RELEASE"
+        springfoxSwaggerVersion = "2.9.2"
+        testcontainersVersion = "1.10.4"
+
+        basePackage = "com.guess"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+    ext["aws-java-sdk.version"] = awsSdkVersion
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.0.6.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com'
+version = '0.1'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+apply from: "gradle/swagger.gradle"
+apply from: "gradle/lombok.gradle"
+apply from: "gradle/mapstruct.gradle"
+
+bootRun {
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = ["-server", "-Xms256m", "-Xmx512m", "-Duser.country=US", "-Duser.language=en", "-Duser.timezone=UTC"]
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.amazonaws:aws-java-sdk-bom:${awsSdkVersion}"
+    }
+}
+
+dependencies {
+    implementation("com.amazonaws:aws-java-sdk-s3")
+    implementation("com.amazonaws:aws-java-sdk-rekognition")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5")
+    implementation("com.vladmihalcea:hibernate-types-52:${hibernateTypes52Version}")
+    implementation("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
+    implementation("io.springfox:springfox-swagger-ui:${springfoxSwaggerVersion}") {
+        exclude module: "springfox-spring-web"
+    }
+    implementation("org.apache.commons:commons-lang3")
+    implementation('org.flywaydb:flyway-core')
+    implementation("org.postgresql:postgresql")
+    implementation("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation "org.zalando:problem-spring-web:${problemVersion}"
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:${jjwtVersion}")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jjwtVersion}")
+
+    testImplementation "com.github.javafaker:javafaker:${javafakerVersion}"
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.security:spring-security-test')
+    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+}
