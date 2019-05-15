@@ -51,10 +51,6 @@ app:
   jwt:
     base64-secret: "2BIMHtZJKdfpGpESKHhq1AEjjzCoU4LPqZID0Nkf9f50EQbqLkly0Epg8fqqOpxMmQmxNT4DyCUfK3G1ME+LFw=="
 
-  amazon:
-    access-key: "AKIAIV2JQ5FO44KIVVOA"
-    secret-key: "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"
-
     s3:
       region: "eu-central-1"
       images-bucket-name: "guess-images"
